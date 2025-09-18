@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: risk-finder
+
+  config:
+    import: optional:application-secret.yml
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/risk_finder?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: 1234
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+
+server:
+  port: 8080
+  address: 0.0.0.0
+
+jwt:
+  secret: ${jwt.secret}
+  expiration: 86400000  # 24시간
+  refreshExpiration: 604800000  # 7일
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: never
