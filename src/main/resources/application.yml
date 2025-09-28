@@ -7,8 +7,13 @@ spring:
 
   datasource:
     url: jdbc:mysql://localhost:3306/risk_finder?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: root
-    password: 1234
+    username: ${db.username}
+    password: ${db.password}
+
+  data:
+    redis:
+      host: ${redis.host}
+      port: ${redis.port}
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -25,7 +30,7 @@ server:
 
 jwt:
   secret: ${jwt.secret}
-  expiration: 86400000  # 24시간
+  AccessExpiration: 86400000  # 24시간
   refreshExpiration: 604800000  # 7일
 
 springdoc:
