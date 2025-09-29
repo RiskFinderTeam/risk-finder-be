@@ -1,6 +1,7 @@
 package org.riskfinderteam.riskfinder.auth.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.riskfinderteam.riskfinder.auth.dto.UserLoginRequestDto;
 import org.riskfinderteam.riskfinder.auth.dto.UserLoginResponseDto;
 import org.riskfinderteam.riskfinder.auth.dto.UserSignupRequestDto;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService{
@@ -34,10 +36,16 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public UserLoginResponseDto login(UserLoginRequestDto requestDto){
         String email = requestDto.getEmail().toLowerCase();
+        log.info("로그인 요청 - email: {}", email);
 
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new BaseException(ErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> {
+                    log.warn("로그인 실패 - 존재하지 않는 사용자 email: {}", email);
+                    return new BaseException(ErrorCode.USER_NOT_FOUND);
+                });
 
         if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())){
+            log.warn("로그인 실패 - 비밀번호 불일치 email: {}", email);
             throw new BaseException(ErrorCode.INVALID_PASSWORD);
         }
 
@@ -50,6 +58,10 @@ public class AuthServiceImpl implements AuthService{
                 refreshExpiration,
                 TimeUnit.MILLISECONDS
         );
+        log.debug("redis에 refreshToken 저장 완료 - key: refreshToken:{}, expire: {}ms",
+                user.getId(), refreshExpiration);
+
+        log.info("로그인 성공 - userId: {}, role: {}", user.getId(), user.getRole());
 
         return new UserLoginResponseDto(user.getId(), accessToken, refreshToken);
     }
@@ -57,8 +69,10 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public UserSignupResponseDto signup(UserSignupRequestDto requestDto){
         String email = requestDto.getEmail().toLowerCase();
+        log.info("회원가입 요청 - email: {}", email);
 
         if(userRepository.existsByEmail(email)){
+            log.warn("회원가입 실패 - 이미 존재하는 email: {}", email);
             throw new BaseException(ErrorCode.AUTH_EMAIL_EXISTS);
         }
 
@@ -70,6 +84,8 @@ public class AuthServiceImpl implements AuthService{
 
         User savedUser = userRepository.save(user);
 
+        log.info("회원가입 성공 - userId: {}, email: {}", savedUser.getId(), savedUser.getEmail());
+
         return new UserSignupResponseDto(savedUser.getId());
     }
 
@@ -78,6 +94,8 @@ public class AuthServiceImpl implements AuthService{
         if(email == null || email.isBlank()){
             return false;
         }
-        return userRepository.existsByEmail(email);
+        boolean exists = userRepository.existsByEmail(email);
+        log.debug("이메일 중복 확인 - email: {}, exists: {}", email, exists);
+        return exists;
     }
 }
