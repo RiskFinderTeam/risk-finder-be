@@ -1,5 +1,8 @@
 package org.riskfinderteam.riskfinder.auth.service;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.riskfinderteam.riskfinder.auth.dto.UserLoginRequestDto;
@@ -8,6 +11,7 @@ import org.riskfinderteam.riskfinder.auth.dto.UserSignupRequestDto;
 import org.riskfinderteam.riskfinder.auth.dto.UserSignupResponseDto;
 import org.riskfinderteam.riskfinder.auth.entity.User;
 import org.riskfinderteam.riskfinder.auth.enums.Role;
+import org.riskfinderteam.riskfinder.auth.jwt.JwtAuthenticationFilter;
 import org.riskfinderteam.riskfinder.auth.jwt.JwtProvider;
 import org.riskfinderteam.riskfinder.auth.repository.UserRepository;
 import org.riskfinderteam.riskfinder.common.exception.BaseException;
@@ -18,6 +22,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -29,6 +36,7 @@ public class AuthServiceImpl implements AuthService{
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
     private final StringRedisTemplate redisTemplate;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Value("${jwt.refreshExpiration}")
     private long refreshExpiration;
@@ -63,7 +71,7 @@ public class AuthServiceImpl implements AuthService{
 
         log.info("로그인 성공 - userId: {}, role: {}", user.getId(), user.getRole());
 
-        return new UserLoginResponseDto(user.getId(), accessToken, refreshToken);
+        return new UserLoginResponseDto(user.getId(), accessToken);
     }
 
     @Override
@@ -109,5 +117,37 @@ public class AuthServiceImpl implements AuthService{
         }else{
             log.warn("refreshToken 없음 - userId: {}", userId);
         }
+    }
+
+    @Override
+    public UserLoginResponseDto refreshToken(HttpServletRequest request, HttpServletResponse response){
+        String refreshToken = jwtAuthenticationFilter.resolveRefreshToken(request);
+
+        Long userId = jwtProvider.getUserIdFromToken(refreshToken);
+
+        String storedToken = redisTemplate.opsForValue().get("refreshToken:" + userId);
+
+        log.info("현재 refreshToken: {}", refreshToken);
+        log.info("현재 storedToken: {}", storedToken);
+
+        if(storedToken == null || !storedToken.equals(refreshToken)){
+            throw new BaseException(ErrorCode.JWT_INVALID);
+        }
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BaseException(ErrorCode.USER_NOT_FOUND));
+
+        String newAccessToken = jwtProvider.createAccessToken(userId, user.getRole());
+        String newRefreshToken = jwtProvider.createRefreshToken(userId);
+
+        redisTemplate.opsForValue().set(
+                "refreshToken:" + userId,
+                newRefreshToken,
+                refreshExpiration,
+                TimeUnit.MILLISECONDS
+        );
+        log.debug("redis에 refreshToken 저장 완료 - key: refreshToken:{}, expire: {}ms",
+                userId, refreshExpiration);
+
+        return new UserLoginResponseDto(userId, newAccessToken);
     }
 }
