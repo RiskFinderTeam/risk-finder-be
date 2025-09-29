@@ -98,4 +98,16 @@ public class AuthServiceImpl implements AuthService{
         log.debug("이메일 중복 확인 - email: {}, exists: {}", email, exists);
         return exists;
     }
+
+    @Override
+    public void logout(Long userId){
+        String key = "refreshToken:" + userId;
+
+        Boolean deleted = redisTemplate.delete(key);
+        if(Boolean.TRUE.equals(deleted)){
+            log.info("로그아웃 성공 - userId: {}", userId);
+        }else{
+            log.warn("refreshToken 없음 - userId: {}", userId);
+        }
+    }
 }

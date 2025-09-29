@@ -10,9 +10,11 @@ import org.riskfinderteam.riskfinder.auth.dto.UserLoginRequestDto;
 import org.riskfinderteam.riskfinder.auth.dto.UserLoginResponseDto;
 import org.riskfinderteam.riskfinder.auth.dto.UserSignupRequestDto;
 import org.riskfinderteam.riskfinder.auth.dto.UserSignupResponseDto;
+import org.riskfinderteam.riskfinder.auth.security.CustomUserDetails;
 import org.riskfinderteam.riskfinder.auth.service.AuthService;
 import org.riskfinderteam.riskfinder.common.dto.CommonResponseDTO;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -44,5 +46,12 @@ public class AuthController {
     public CommonResponseDTO<Boolean> checkEmail(@RequestParam String email){
         boolean isAvailable = authService.existsByEmail(email);
         return CommonResponseDTO.success(HttpStatus.OK, "이메일 중복 확인을 완료했습니다.", isAvailable);
+    }
+
+    @Operation(summary = "로그아웃 API", description = "로그아웃을 진행합니다.")
+    @DeleteMapping("/logout")
+    public CommonResponseDTO<Void> logout(@AuthenticationPrincipal CustomUserDetails userDetails){
+        authService.logout(userDetails.getUserId());
+        return CommonResponseDTO.success(HttpStatus.OK, "로그아웃에 성공했습니다.");
     }
 }

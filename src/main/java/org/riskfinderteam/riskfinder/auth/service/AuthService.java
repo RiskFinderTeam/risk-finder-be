@@ -13,4 +13,6 @@ public interface AuthService {
     UserSignupResponseDto signup(UserSignupRequestDto requestDto);
 
     boolean existsByEmail(String email);
+
+    void logout(Long userId);
 }
