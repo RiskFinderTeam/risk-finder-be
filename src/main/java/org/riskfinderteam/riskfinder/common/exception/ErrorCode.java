@@ -14,7 +14,8 @@ public enum ErrorCode {
     JWT_NOT_CONFIGURED(HttpStatus.BAD_REQUEST, "JWT 비밀 키가 설정되지 않았습니다."),
 
     // 401 Unauthorized
-    AUTH_TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "유효하지 않거나 만료된 토큰입니다."),
+    JWT_INVALID(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
+    JWT_EXPIRED(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다."),
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
 
     // 403 Forbidden
