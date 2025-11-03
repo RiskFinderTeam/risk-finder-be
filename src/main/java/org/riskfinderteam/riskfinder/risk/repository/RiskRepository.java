@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RiskRepository extends JpaRepository<ScoringResult, Long> {
-    CustomerFactorDto getTop3FeaturesById(Long id);
+    CustomerFactorDto getTop3FeaturesBySkIdCurr(Long skIdCurr);
 }
