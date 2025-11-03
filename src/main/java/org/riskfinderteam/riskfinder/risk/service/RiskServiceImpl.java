@@ -13,6 +13,6 @@ public class RiskServiceImpl implements RiskService{
     private final RiskRepository riskRepository;
     @Override
     public CustomerFactorDto getTop3FeaturesById(Long id){
-        return riskRepository.getTop3FeaturesById(id);
+        return riskRepository.getTop3FeaturesBySkIdCurr(id);
     }
 }
