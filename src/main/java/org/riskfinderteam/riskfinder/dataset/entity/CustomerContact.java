@@ -14,7 +14,7 @@ import lombok.*;
 public class CustomerContact {
     @Id
     @Column(name = "SK_ID_CURR", nullable = false)
-    private Long skIdCurr;
+    private int skIdCurr;
 
     @Column(name = "DAYS_REGISTRATION")
     private int daysRegistration;

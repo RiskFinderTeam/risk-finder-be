@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 public class LoanMain {
     @Id
     @Column(name = "SK_ID_CURR", nullable = false)
-    private Long skIdCurr;
+    private int skIdCurr;
 
     @Column(name = "TARGET")
     private int target;

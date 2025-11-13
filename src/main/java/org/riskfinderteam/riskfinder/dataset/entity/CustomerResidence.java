@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 public class CustomerResidence {
     @Id
     @Column(name = "SK_ID_CURR", nullable = false)
-    private String skIdCurr;
+    private int skIdCurr;
 
     @Column(name = "REGION_POPULATION_RELATIVE", precision = 10, scale = 6)
     private BigDecimal regionPopulationRelative;

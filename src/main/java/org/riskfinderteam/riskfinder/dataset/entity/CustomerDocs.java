@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 public class CustomerDocs {
     @Id
     @Column(name = "SK_ID_CURR", nullable = false)
-    private String skIdCurr;
+    private int skIdCurr;
 
     @Column(name = "OBS_30_CNT_SOCIAL_CIRCLE", precision = 10, scale = 2)
     private BigDecimal obs30CntSocialCircle;

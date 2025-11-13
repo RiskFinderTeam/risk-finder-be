@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 public class CustomerInfo {
     @Id
     @Column(name = "SK_ID_CURR", nullable = false)
-    private String skIdCurr;
+    private int skIdCurr;
 
     @Column(name = "CODE_GENDER", length = 5)
     private  String codeGender;
