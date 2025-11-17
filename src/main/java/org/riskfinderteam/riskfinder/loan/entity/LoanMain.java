@@ -8,7 +8,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
-@Entity
+@Entity(name = "LoanLoanMain")
 @Table(name = "loan_main")
 @AllArgsConstructor
 @Getter @Setter
@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 public class LoanMain {
     @Id
     @Column(name = "SK_ID_CURR", nullable = false)
-    private Long skIdCurr;
+    private Integer skIdCurr;
 
     @Column(name = "NAME_CONTRACT_TYPE", nullable = false)
     private String nameContractType;

@@ -48,3 +48,10 @@ management:
   endpoint:
     health:
       show-details: never
+
+path:
+  loan-main: ${path.loan-main}
+  customer-contact: ${path.customer-contact}
+  customer-info: ${path.customer-info}
+  customer-docs: ${path.customer-docs}
+  customer-residence: ${path.customer-residence}
