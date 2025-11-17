@@ -16,34 +16,34 @@ import java.math.BigDecimal;
 public class CustomerResidence {
     @Id
     @Column(name = "SK_ID_CURR", nullable = false)
-    private int skIdCurr;
+    private Integer skIdCurr;
 
     @Column(name = "REGION_POPULATION_RELATIVE", precision = 10, scale = 6)
     private BigDecimal regionPopulationRelative;
 
     @Column(name = "REGION_RATING_CLIENT")
-    private int regionRatingClient;
+    private Integer regionRatingClient;
 
     @Column(name ="REGION_RATING_CLIENT_W_CITY")
-    private int regionRatingClientWCity;
+    private Integer regionRatingClientWCity;
 
     @Column(name = "REG_REGION_NOT_LIVE_REGION")
-    private int regionNotLiveRegion;
+    private Integer regionNotLiveRegion;
 
     @Column(name = "REG_REGION_NOT_WORK_REGION")
-    private int regionNotWorkRegion;
+    private Integer regionNotWorkRegion;
 
     @Column(name = "LIVE_REGION_NOT_WORK_REGION")
-    private int liveRegionNotWorkRegion;
+    private Integer liveRegionNotWorkRegion;
 
     @Column(name = "REG_CITY_NOT_LIVE_CITY")
-    private int cityNotLiveCity;
+    private Integer cityNotLiveCity;
 
     @Column(name = "REG_CITY_NOT_WORK_CITY")
-    private int cityNotWorkCity;
+    private Integer cityNotWorkCity;
 
     @Column(name = "LIVE_CITY_NOT_WORK_CITY")
-    private int liveCityNotWorkCity;
+    private Integer liveCityNotWorkCity;
 
     @Column(name = "APARTMENTS_AVG", precision = 10, scale = 6)
     private BigDecimal apartmentsAvg;

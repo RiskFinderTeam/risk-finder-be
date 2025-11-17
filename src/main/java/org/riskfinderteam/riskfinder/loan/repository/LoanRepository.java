@@ -16,7 +16,7 @@ public interface LoanRepository extends JpaRepository<LoanMain, Long> {
             l.amtCredit,
             s.score
         )
-        FROM LoanMain l
+        FROM LoanLoanMain l
         JOIN LoanScore s ON l.skIdCurr = s.skIdCurr
         WHERE l.skIdCurr = :customerId
     """)

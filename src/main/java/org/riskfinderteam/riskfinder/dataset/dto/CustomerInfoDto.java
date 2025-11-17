@@ -10,12 +10,12 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class CustomerInfoDto {
-    private int skIdCurr;
+    private Integer skIdCurr;
     private  String codeGender;
     private  String flagOwnCar;
     private  String flagOwnRealty;
-    private int ownCarAge;
-    private int cntChildren;
+    private Integer ownCarAge;
+    private Integer cntChildren;
     private BigDecimal cntFamMembers;
     private String nameFamilyStatus;
     private String nameEducationType;
@@ -25,9 +25,9 @@ public class CustomerInfoDto {
     private String occupationType;
     private String organizationType;
     private BigDecimal amtIncomeTotal;
-    private int daysBirth;
-    private int daysEmployed;
-    private double extSource1;
-    private double extSource2;
-    private double extSource3;
+    private Integer daysBirth;
+    private Integer daysEmployed;
+    private Double extSource1;
+    private Double extSource2;
+    private Double extSource3;
 }

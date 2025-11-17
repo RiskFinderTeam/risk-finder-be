@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class CustomerDocsDto {
-    private int skIdCurr;
+    private Integer skIdCurr;
     private BigDecimal obs30CntSocialCircle;
     private BigDecimal def30CntSocialCircle;
     private BigDecimal obs60CntSocialCircle;

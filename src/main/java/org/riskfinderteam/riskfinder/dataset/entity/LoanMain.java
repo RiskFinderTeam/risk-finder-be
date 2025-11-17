@@ -8,7 +8,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
-@Entity
+@Entity(name = "DatasetLoanMain")
 @Table(name = "loan_main")
 @AllArgsConstructor
 @Getter @Setter
@@ -16,10 +16,7 @@ import java.math.BigDecimal;
 public class LoanMain {
     @Id
     @Column(name = "SK_ID_CURR", nullable = false)
-    private int skIdCurr;
-
-    @Column(name = "TARGET")
-    private int target;
+    private Integer skIdCurr;
 
     @Column(name = "NAME_CONTRACT_TYPE", length = 50)
     private String nameContractType;
@@ -37,23 +34,23 @@ public class LoanMain {
     private String weekdayApprProcessStart;
 
     @Column(name = "HOUR_APPR_PROCESS_START")
-    private int hourApprProcessStart;
+    private Integer hourApprProcessStart;
 
     @Column(name = "AMT_REQ_CREDIT_BUREAU_HOUR")
-    private int amtReqCreditBureauHour;
+    private Integer amtReqCreditBureauHour;
 
     @Column(name = "AMT_REQ_CREDIT_BUREAU_DAY")
-    private int amtReqCreditBureauDay;
+    private Integer amtReqCreditBureauDay;
 
     @Column(name = "AMT_REQ_CREDIT_BUREAU_WEEK")
-    private int amtReqCreditBureauWeek;
+    private Integer amtReqCreditBureauWeek;
 
     @Column(name = "AMT_REQ_CREDIT_BUREAU_MON")
-    private int amtReqCreditBureauMon;
+    private Integer amtReqCreditBureauMon;
 
     @Column(name = "AMT_REQ_CREDIT_BUREAU_QRT")
-    private int amtReqCreditBureauQrt;
+    private Integer amtReqCreditBureauQrt;
 
     @Column(name = "AMT_REQ_CREDIT_BUREAU_YEAR")
-    private int amtReqCreditBureauYear;
+    private Integer amtReqCreditBureauYear;
 }

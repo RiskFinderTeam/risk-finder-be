@@ -8,14 +8,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CustomerContactDto {
-    private int skIdCurr;
-    private int daysRegistration;
-    private int daysIdPublish;
-    private int daysLastPhoneChange;
-    private int flagMobil;
-    private int flagEmpPhone;
-    private int flagWorkPhone;
-    private int flagContMobile;
-    private int flagPhone;
-    private int flagEmail;
+    private Integer skIdCurr;
+    private Integer daysRegistration;
+    private Integer daysIdPublish;
+    private Integer daysLastPhoneChange;
+    private Integer flagMobil;
+    private Integer flagEmpPhone;
+    private Integer flagWorkPhone;
+    private Integer flagContMobile;
+    private Integer flagPhone;
+    private Integer flagEmail;
 }

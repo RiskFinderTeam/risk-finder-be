@@ -11,16 +11,16 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class CustomerResidenceDto {
-    private int skIdCurr;
+    private Integer skIdCurr;
     private BigDecimal regionPopulationRelative;
-    private int regionRatingClient;
-    private int regionRatingClientWCity;
-    private int regionNotLiveRegion;
-    private int regionNotWorkRegion;
-    private int liveRegionNotWorkRegion;
-    private int cityNotLiveCity;
-    private int cityNotWorkCity;
-    private int liveCityNotWorkCity;
+    private Integer regionRatingClient;
+    private Integer regionRatingClientWCity;
+    private Integer regionNotLiveRegion;
+    private Integer regionNotWorkRegion;
+    private Integer liveRegionNotWorkRegion;
+    private Integer cityNotLiveCity;
+    private Integer cityNotWorkCity;
+    private Integer liveCityNotWorkCity;
     private BigDecimal apartmentsAvg;
     private BigDecimal apartmentsMode;
     private BigDecimal apartmentsMedi;

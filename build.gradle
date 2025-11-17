@@ -57,6 +57,9 @@ dependencies {
 
     // Health
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    //Csv
+    implementation 'org.apache.commons:commons-csv:1.10.0'
 }
 
 tasks.named('test') {

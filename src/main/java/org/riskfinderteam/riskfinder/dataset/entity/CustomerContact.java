@@ -14,32 +14,32 @@ import lombok.*;
 public class CustomerContact {
     @Id
     @Column(name = "SK_ID_CURR", nullable = false)
-    private int skIdCurr;
+    private Integer skIdCurr;
 
     @Column(name = "DAYS_REGISTRATION")
-    private int daysRegistration;
+    private Integer daysRegistration;
 
     @Column(name = "DAYS_ID_PUBLISH")
-    private int daysIdPublish;
+    private Integer daysIdPublish;
 
     @Column(name = "DAYS_LAST_PHONE_CHANGE")
-    private int daysLastPhoneChange;
+    private Integer daysLastPhoneChange;
 
     @Column(name = "FLAG_MOBIL")
-    private int flagMobil;
+    private Integer flagMobil;
 
     @Column(name = "FLAG_EMP_PHONE")
-    private int flagEmpPhone;
+    private Integer flagEmpPhone;
 
     @Column(name = "FLAG_WORK_PHONE")
-    private int flagWorkPhone;
+    private Integer flagWorkPhone;
 
     @Column(name = "FLAG_CONT_MOBILE")
-    private int flagContMobile;
+    private Integer flagContMobile;
 
     @Column(name = "FLAG_PHONE")
-    private int flagPhone;
+    private Integer flagPhone;
 
     @Column(name = "FLAG_EMAIL")
-    private int flagEmail;
+    private Integer flagEmail;
 }

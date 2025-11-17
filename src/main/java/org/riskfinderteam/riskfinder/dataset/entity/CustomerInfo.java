@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 public class CustomerInfo {
     @Id
     @Column(name = "SK_ID_CURR", nullable = false)
-    private int skIdCurr;
+    private Integer skIdCurr;
 
     @Column(name = "CODE_GENDER", length = 5)
     private  String codeGender;
@@ -28,10 +28,10 @@ public class CustomerInfo {
     private  String flagOwnRealty;
 
     @Column(name = "OWN_CAR_AGE")
-    private int ownCarAge;
+    private Integer ownCarAge;
 
     @Column(name = "CNT_CHILDREN")
-    private int cntChildren;
+    private Integer cntChildren;
 
     @Column(name = "CNT_FAM_MEMBERS", precision = 10, scale = 2)
     private BigDecimal cntFamMembers;
@@ -61,17 +61,17 @@ public class CustomerInfo {
     private BigDecimal amtIncomeTotal;
 
     @Column(name = "DAYS_BIRTH")
-    private int daysBirth;
+    private Integer daysBirth;
 
     @Column(name = "DAYS_EMPLOYED")
-    private int daysEmployed;
+    private Integer daysEmployed;
 
     @Column(name = "EXT_SOURCE_1")
-    private double extSource1;
+    private Double extSource1;
 
     @Column(name = "EXT_SOURCE_2")
-    private double extSource2;
+    private Double extSource2;
 
     @Column(name = "EXT_SOURCE_3")
-    private double extSource3;
+    private Double extSource3;
 }

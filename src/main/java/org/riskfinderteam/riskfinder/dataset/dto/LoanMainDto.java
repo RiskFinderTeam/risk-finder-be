@@ -11,18 +11,17 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class LoanMainDto {
-    private int skIdCurr;
-    private int target;
+    private Integer skIdCurr;
     private String nameContractType;
     private BigDecimal amtCredit;
     private BigDecimal amtAnnuity;
     private BigDecimal amtGoodsPrice;
     private String weekdayApprProcessStart;
-    private int hourApprProcessStart;
-    private int amtReqCreditBureauHour;
-    private int amtReqCreditBureauDay;
-    private int amtReqCreditBureauWeek;
-    private int amtReqCreditBureauMon;
-    private int amtReqCreditBureauQrt;
-    private int amtReqCreditBureauYear;
+    private Integer hourApprProcessStart;
+    private Integer amtReqCreditBureauHour;
+    private Integer amtReqCreditBureauDay;
+    private Integer amtReqCreditBureauWeek;
+    private Integer amtReqCreditBureauMon;
+    private Integer amtReqCreditBureauQrt;
+    private Integer amtReqCreditBureauYear;
 }

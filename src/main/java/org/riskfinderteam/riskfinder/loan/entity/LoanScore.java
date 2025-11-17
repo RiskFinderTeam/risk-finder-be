@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 public class LoanScore {
     @Id
     @Column(name = "SK_ID_CURR", nullable = false)
-    private Long skIdCurr;
+    private Integer skIdCurr;
 
     @Column(name = "SCORE", nullable = false, precision = 5, scale = 4)
     private BigDecimal score;
