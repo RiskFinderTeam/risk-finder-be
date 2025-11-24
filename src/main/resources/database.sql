@@ -179,10 +179,21 @@ DROP TABLE IF EXISTS `score_history`;
 CREATE TABLE `score_history`
 (
     `SK_ID_CURR`    INT           NOT NULL,
-    `HISTORY_ID`    INT           NOT NULL,
+    `ID`            INT           NOT NULL,
     `SCORE`         DECIMAL(5, 4) NOT NULL,
     `GRADE`         VARCHAR(20)   NOT NULL,
     `TOP3_FEATURES` TEXT          NULL,
     `SCORED_AT`     DATETIME      NOT NULL,
+    primary key (`SK_ID_CURR`)
+);
+
+DROP TABLE IF EXISTS `customer`;
+CREATE TABLE `customer`
+(
+    `SK_ID_CURR` INT          NOT NULL,
+    `NAME`       VARCHAR(50)  NOT NULL,
+    `birth`      DATE         NOT NULL,
+    `phone`      VARCHAR(50)  NOT NULL,
+    `email`      VARCHAR(200) NOT NULL,
     primary key (`SK_ID_CURR`)
 );
