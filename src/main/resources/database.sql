@@ -186,3 +186,14 @@ CREATE TABLE `score_history`
     `SCORED_AT`     DATETIME      NOT NULL,
     primary key (`SK_ID_CURR`)
 );
+
+DROP TABLE IF EXISTS `customer`;
+CREATE TABLE `customer`
+(
+    `SK_ID_CURR` INT          NOT NULL,
+    `NAME`       VARCHAR(50)  NOT NULL,
+    `birth`      DATE         NOT NULL,
+    `phone`      VARCHAR(50)  NOT NULL,
+    `email`      VARCHAR(200) NOT NULL,
+    primary key (`SK_ID_CURR`)
+);
