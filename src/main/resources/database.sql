@@ -179,7 +179,7 @@ DROP TABLE IF EXISTS `score_history`;
 CREATE TABLE `score_history`
 (
     `SK_ID_CURR`    INT           NOT NULL,
-    `HISTORY_ID`    INT           NOT NULL,
+    `ID`            INT           NOT NULL,
     `SCORE`         DECIMAL(5, 4) NOT NULL,
     `GRADE`         VARCHAR(20)   NOT NULL,
     `TOP3_FEATURES` TEXT          NULL,
