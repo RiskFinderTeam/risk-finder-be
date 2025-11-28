@@ -1,5 +1,7 @@
 package org.riskfinderteam.riskfinder.auth.service;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,13 +20,16 @@ import org.riskfinderteam.riskfinder.common.exception.BaseException;
 import org.riskfinderteam.riskfinder.common.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -37,9 +42,13 @@ public class AuthServiceImpl implements AuthService{
     private final JwtProvider jwtProvider;
     private final StringRedisTemplate redisTemplate;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JavaMailSender javaMailSender;
 
     @Value("${jwt.refreshExpiration}")
     private long refreshExpiration;
+
+    @Value("${spring.mail.username}")
+    private String fromEmail;
 
     @Override
     public UserLoginResponseDto login(UserLoginRequestDto requestDto){
@@ -78,6 +87,11 @@ public class AuthServiceImpl implements AuthService{
     public UserSignupResponseDto signup(UserSignupRequestDto requestDto){
         String email = requestDto.getEmail().toLowerCase();
         log.info("회원가입 요청 - email: {}", email);
+
+        String isVerified = redisTemplate.opsForValue().get("verified:" + email);
+        if (isVerified == null || !isVerified.equals("true")) {
+            throw new BaseException(ErrorCode.EMAIL_NOT_VERIFIED);
+        }
 
         if(userRepository.existsByEmail(email)){
             log.warn("회원가입 실패 - 이미 존재하는 email: {}", email);
@@ -149,5 +163,56 @@ public class AuthServiceImpl implements AuthService{
                 userId, refreshExpiration);
 
         return new UserLoginResponseDto(userId, newAccessToken);
+    }
+
+    @Override
+    public void sendMail(String email) {
+        String authCode = createCode();
+
+        MimeMessage message = createMessage(email, authCode);
+        javaMailSender.send(message);
+
+        redisTemplate.opsForValue().set(email, authCode, Duration.ofMinutes(3));
+    }
+
+    @Override
+    public boolean verifyEmailCode(String email, String code) {
+        String storedCode = redisTemplate.opsForValue().get(email);
+
+        if (storedCode != null && storedCode.equals(code)) {
+            redisTemplate.delete(email);
+            redisTemplate.opsForValue().set("verified:" + email, "true", Duration.ofMinutes(20));
+
+            return true;
+        }
+        return false;
+    }
+
+    private String createCode() {
+        Random random = new Random();
+        StringBuilder key = new StringBuilder();
+
+        for (int i = 0; i < 6; i++) {
+            int index = random.nextInt(10);
+            key.append(index);
+        }
+        return key.toString();
+    }
+
+    private MimeMessage createMessage(String to, String authCode) {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        try {
+            message.setFrom(fromEmail);
+            message.setRecipients(MimeMessage.RecipientType.TO, to);
+            message.setSubject("이메일 인증 번호입니다.");
+            String body = "";
+            body += "<h3>" + "요청하신 인증 번호입니다." + "</h3>";
+            body += "<h1>" + authCode + "</h1>";
+            message.setText(body, "UTF-8", "html");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            throw new RuntimeException("메일 생성 에러");
+        }
+        return message;
     }
 }

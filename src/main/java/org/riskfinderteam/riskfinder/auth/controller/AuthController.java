@@ -8,10 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
-import org.riskfinderteam.riskfinder.auth.dto.UserLoginRequestDto;
-import org.riskfinderteam.riskfinder.auth.dto.UserLoginResponseDto;
-import org.riskfinderteam.riskfinder.auth.dto.UserSignupRequestDto;
-import org.riskfinderteam.riskfinder.auth.dto.UserSignupResponseDto;
+import org.riskfinderteam.riskfinder.auth.dto.*;
 import org.riskfinderteam.riskfinder.auth.jwt.JwtAuthenticationFilter;
 import org.riskfinderteam.riskfinder.auth.security.CustomUserDetails;
 import org.riskfinderteam.riskfinder.auth.service.AuthService;
@@ -92,5 +89,23 @@ public class AuthController {
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
         return CommonResponseDTO.success(HttpStatus.OK, "토큰 재발급에 성공했습니다.", responseDto);
+    }
+    
+    @Operation(summary = "인증 메일 발송", description = "인증 메일을 발송합니다.")
+    @PostMapping("/send-mail/{email}")
+    public CommonResponseDTO<Void> sendMail(@PathVariable String email){
+        authService.sendMail(email);
+        return  CommonResponseDTO.success(HttpStatus.OK, "메일 발송에 성공했습니다.");
+    }
+
+    @Operation(summary = "메일 인증", description = "메일 코드를 확인합니다.")
+    @PostMapping("/verify-code")
+    public CommonResponseDTO<Boolean> verifyCode(@RequestBody EmailVerifyDto verifyDto){
+        boolean isVerified = authService.verifyEmailCode(verifyDto.getEmail(), verifyDto.getAuthCode());
+        if(isVerified){
+            return CommonResponseDTO.success(HttpStatus.OK, "이메일 인증이 완료되었습니다.", true);
+        } else{
+            return CommonResponseDTO.error("이메일 인증 실패", 401);
+        }
     }
 }

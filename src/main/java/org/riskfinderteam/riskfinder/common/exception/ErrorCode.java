@@ -12,6 +12,7 @@ public enum ErrorCode {
     AUTH_VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "사용자 입력값이 올바르지 않습니다."),
     AUTH_EMAIL_EXISTS(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다."),
     JWT_NOT_CONFIGURED(HttpStatus.BAD_REQUEST, "JWT 비밀 키가 설정되지 않았습니다."),
+    EMAIL_NOT_VERIFIED(HttpStatus.BAD_REQUEST, "이메일 인증이 완료되지 않았습니다."),
 
     // 401 Unauthorized
     JWT_INVALID(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),

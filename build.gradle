@@ -60,8 +60,10 @@ dependencies {
 
     //Csv
     implementation 'org.apache.commons:commons-csv:1.10.0'
-}
 
+    // Mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+}
 tasks.named('test') {
     useJUnitPlatform()
 }

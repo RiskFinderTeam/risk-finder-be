@@ -19,4 +19,8 @@ public interface AuthService {
     void logout(Long userId);
 
     UserLoginResponseDto refreshToken(HttpServletRequest request, HttpServletResponse response);
+
+    void sendMail(String email);
+
+    boolean verifyEmailCode(String email, String code);
 }
