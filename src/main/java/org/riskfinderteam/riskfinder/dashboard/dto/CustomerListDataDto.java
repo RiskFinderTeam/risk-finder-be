@@ -5,17 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.security.Timestamp;
 
 @AllArgsConstructor
 @Getter
 @Setter
-public class CustomerDataDto {
+public class CustomerListDataDto {
     private Integer skIdCurr;
     private String name;
-    private String phone;
-    private String email;
     private BigDecimal score;
     private String grade;
-    private String top3Features;
 }

@@ -8,11 +8,11 @@ import org.apache.commons.csv.CSVRecord;
 import org.riskfinderteam.riskfinder.dataset.entity.CustomerDocs;
 import org.riskfinderteam.riskfinder.dataset.repository.CustomerDocsRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,29 +21,39 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class CustomerDocsCsvReader {
+
     private final CustomerDocsRepository customerDocsRepository;
     private final CsvValueParser csvValueParser;
 
+    // 한 번에 저장할 데이터 개수
+    private static final int BATCH_SIZE = 1000;
+
+    @Transactional
     public void readAndSave(String path){
         try{
-            Reader reader = new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_8);
-            CSVParser parser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withTrim());
+            log.info("📂 CustomerDocs 데이터 로딩 시작: {}", path);
 
-            List<String> originalHeaders = parser.getHeaderNames();
+            // 1. 헤더 정리를 위한 임시 읽기
+            Reader reader = new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_8);
+            CSVParser tempParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withTrim());
+            List<String> originalHeaders = tempParser.getHeaderNames();
             List<String> cleanHeaders = originalHeaders.stream()
                     .map(h -> h.replace("\uFEFF", "").trim())
                     .toList();
-            log.info("정상화된 헤더: {}", cleanHeaders);
+            tempParser.close(); // 임시 파서 닫기
 
+            // 2. 실제 데이터 읽기
+            reader = new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_8);
             CSVFormat cleanFormat = CSVFormat.DEFAULT.builder()
                     .setHeader(cleanHeaders.toArray(new String[0]))
                     .setSkipHeaderRecord(true)
                     .setTrim(true)
                     .build();
 
-            parser = new CSVParser(reader, cleanFormat);
+            CSVParser parser = new CSVParser(reader, cleanFormat);
 
-            List<CustomerDocs> list = new ArrayList<>();
+            List<CustomerDocs> batchList = new ArrayList<>();
+            int totalCount = 0;
 
             for(CSVRecord r : parser){
                 CustomerDocs entity = CustomerDocs.builder()
@@ -74,13 +84,25 @@ public class CustomerDocsCsvReader {
                         .flagDocument21(r.get("FLAG_DOCUMENT_21"))
                         .build();
 
-                list.add(entity);
+                batchList.add(entity);
+                totalCount++;
+
+                // ★ 핵심: 1000개마다 저장 및 비우기
+                if (batchList.size() >= BATCH_SIZE) {
+                    customerDocsRepository.saveAll(batchList);
+                    customerDocsRepository.flush(); // 즉시 전송
+                    batchList.clear(); // 메모리 비우기
+                    log.info("🚀 CustomerDocs 데이터 {}건 저장 중...", totalCount);
+                }
             }
 
-            log.info("CSV 파싱 완료: 총 {} 개 레코드", list.size());
+            // 남은 데이터 저장
+            if (!batchList.isEmpty()) {
+                customerDocsRepository.saveAll(batchList);
+                customerDocsRepository.flush();
+            }
 
-            customerDocsRepository.saveAll(list);
-            log.info("DB 저장 완료: {} rows", list.size());
+            log.info("✅ CustomerDocs DB 저장 최종 완료: 총 {} rows", totalCount);
 
         } catch (Exception e) {
             throw new RuntimeException("CSV 로딩 실패: " + e.getMessage(), e);

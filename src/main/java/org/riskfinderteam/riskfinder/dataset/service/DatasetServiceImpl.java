@@ -13,6 +13,7 @@ public class DatasetServiceImpl implements DatasetService {
     private final CustomerInfoCsvReader customerInfoCsvReader;
     private final CustomerResidenceCsvReader customerResidenceCsvReader;
     private final LoanMainCsvReader loanMainCsvReader;
+    private final CustomerCsvReader customerCsvReader;
 
     @Value("${path.loan-main}")
     private String loanMainPath;
@@ -29,6 +30,9 @@ public class DatasetServiceImpl implements DatasetService {
     @Value("${path.customer-residence}")
     private String customerResidencePath;
 
+    @Value("${path.customer}")
+    private String customerPath;
+
     @Override
     public void saveData(){
         customerContactCsvReader.readAndSave(customerContactPath);
@@ -36,5 +40,6 @@ public class DatasetServiceImpl implements DatasetService {
         customerInfoCsvReader.readAndSave(customerInfoPath);
         customerResidenceCsvReader.readAndSave(customerResidencePath);
         loanMainCsvReader.readAndSave(loanMainPath);
+        customerCsvReader.readAndSave(customerPath);
     }
 }

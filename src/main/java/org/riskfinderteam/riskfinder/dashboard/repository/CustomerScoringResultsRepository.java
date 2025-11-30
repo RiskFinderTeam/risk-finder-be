@@ -1,22 +1,32 @@
 package org.riskfinderteam.riskfinder.dashboard.repository;
 
+import io.lettuce.core.dynamic.annotation.Param;
 import org.riskfinderteam.riskfinder.dashboard.dto.CustomerAverageDataDto;
 import org.riskfinderteam.riskfinder.dashboard.dto.CustomerDataDto;
+import org.riskfinderteam.riskfinder.dashboard.dto.CustomerListDataDto;
 import org.riskfinderteam.riskfinder.dashboard.entity.CustomerScoringResults;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CustomerScoringResultsRepository extends JpaRepository<CustomerScoringResults, Long>{
-    CustomerDataDto findBySkIdCurr(Integer skIdCurr);
+    @Query("SELECT new org.riskfinderteam.riskfinder.dashboard.dto.CustomerListDataDto(" +
+            "c.skIdCurr, c.name, s.score, s.grade) " +
+            "FROM Customer c " +
+            "JOIN CustomerScoringResults s ON c.skIdCurr = s.skIdCurr")
+    List<CustomerListDataDto> findAllCustomerListData();
 
     @Query("SELECT new org.riskfinderteam.riskfinder.dashboard.dto.CustomerDataDto(" +
-            "c.skIdCurr, c.score, c.grade, c.top3Features, c.scoredAt) " +
-            "FROM CustomerScoringResults c")
-    List<CustomerDataDto> findAllData();
+            "c.skIdCurr, c.name, c.phone, c.email, " +
+            "s.score, s.grade, s.top3Features) " +
+            "FROM Customer c " +
+            "JOIN CustomerScoringResults s ON c.skIdCurr = s.skIdCurr " +
+            "WHERE c.skIdCurr = :skIdCurr")
+    Optional<CustomerDataDto> findCustomerDetailById(@Param("skIdCurr") Integer skIdCurr);
 
     @Query("""
         SELECT new org.riskfinderteam.riskfinder.dashboard.dto.CustomerAverageDataDto(

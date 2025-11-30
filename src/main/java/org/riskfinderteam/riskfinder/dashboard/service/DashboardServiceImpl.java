@@ -1,10 +1,7 @@
 package org.riskfinderteam.riskfinder.dashboard.service;
 
 import lombok.RequiredArgsConstructor;
-import org.riskfinderteam.riskfinder.dashboard.dto.CustomerAverageDataDto;
-import org.riskfinderteam.riskfinder.dashboard.dto.CustomerAverageDataResponse;
-import org.riskfinderteam.riskfinder.dashboard.dto.CustomerDataDto;
-import org.riskfinderteam.riskfinder.dashboard.dto.CustomerExtSourceDataDto;
+import org.riskfinderteam.riskfinder.dashboard.dto.*;
 import org.riskfinderteam.riskfinder.dashboard.repository.CustomerScoringResultsRepository;
 import org.riskfinderteam.riskfinder.dashboard.repository.DashboardCustomerInfoRepository;
 import org.springframework.stereotype.Service;
@@ -20,12 +17,13 @@ private final DashboardCustomerInfoRepository dashboardCustomerInfoRepository;
 
     @Override
     public CustomerDataDto getCustomerData(Integer customerId){
-        return customerScoringResultsRepository.findBySkIdCurr(customerId);
+        return customerScoringResultsRepository.findCustomerDetailById(customerId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 고객 데이터를 찾을 수 없습니다. ID: " + customerId));
     }
 
     @Override
-    public List<CustomerDataDto> getCustomerDataList(){
-        return customerScoringResultsRepository.findAllData();
+    public List<CustomerListDataDto> getCustomerDataList(){
+        return customerScoringResultsRepository.findAllCustomerListData();
     }
 
     @Override
