@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.riskfinderteam.riskfinder.common.dto.CommonResponseDTO;
 import org.riskfinderteam.riskfinder.dashboard.dto.CustomerAverageDataResponse;
 import org.riskfinderteam.riskfinder.dashboard.dto.CustomerDataDto;
+import org.riskfinderteam.riskfinder.dashboard.dto.CustomerListDataDto;
 import org.riskfinderteam.riskfinder.dashboard.service.DashboardService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,8 +28,8 @@ public class DashboardController {
     }
 
     @GetMapping("/customers")
-    public CommonResponseDTO<List<CustomerDataDto>> getCustomerDataList(){
-        List<CustomerDataDto> dtos = dashboardService.getCustomerDataList();
+    public CommonResponseDTO<List<CustomerListDataDto>> getCustomerDataList(){
+        List<CustomerListDataDto> dtos = dashboardService.getCustomerDataList();
         return CommonResponseDTO.success(HttpStatus.OK, "고객 데이터 리스트 조회 성공", dtos);
     }
 

@@ -6,7 +6,7 @@ spring:
     import: optional:application-secret.yml
 
   datasource:
-    url: jdbc:mysql://localhost:3306/risk_finder?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: ${db.url}
     username: ${db.username}
     password: ${db.password}
 
@@ -21,8 +21,12 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        format_sql: true
-        show_sql: true
+        show_sql: false
+        format_sql: false
+        jdbc:
+          batch_size: 1000
+          order_inserts: true
+          order_updates: true
 
   mail:
     host: smtp.gmail.com
@@ -71,3 +75,4 @@ path:
   customer-info: ${path.customer-info}
   customer-docs: ${path.customer-docs}
   customer-residence: ${path.customer-residence}
+  customer: ${path.customer}
