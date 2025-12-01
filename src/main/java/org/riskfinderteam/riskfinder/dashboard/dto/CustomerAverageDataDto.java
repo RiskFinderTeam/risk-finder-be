@@ -14,4 +14,6 @@ public class CustomerAverageDataDto {
     private Double gradeAverageA;
     private Double gradeAverageB;
     private Double gradeAverageC;
+    private Double gradeAverageD;
+    private Double gradeAverageE;
 }
