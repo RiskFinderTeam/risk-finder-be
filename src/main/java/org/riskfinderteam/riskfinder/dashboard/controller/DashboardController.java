@@ -6,11 +6,9 @@ import org.riskfinderteam.riskfinder.dashboard.dto.CustomerAverageDataResponse;
 import org.riskfinderteam.riskfinder.dashboard.dto.CustomerDataDto;
 import org.riskfinderteam.riskfinder.dashboard.dto.CustomerListDataDto;
 import org.riskfinderteam.riskfinder.dashboard.service.DashboardService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,8 +26,13 @@ public class DashboardController {
     }
 
     @GetMapping("/customers")
-    public CommonResponseDTO<List<CustomerListDataDto>> getCustomerDataList(){
-        List<CustomerListDataDto> dtos = dashboardService.getCustomerDataList();
+    public CommonResponseDTO<Page<CustomerListDataDto>> getCustomerDataList(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) List<String> grades
+    ){
+        Page<CustomerListDataDto> dtos = dashboardService.getCustomerDataList(page, search, grades);
+
         return CommonResponseDTO.success(HttpStatus.OK, "고객 데이터 리스트 조회 성공", dtos);
     }
 

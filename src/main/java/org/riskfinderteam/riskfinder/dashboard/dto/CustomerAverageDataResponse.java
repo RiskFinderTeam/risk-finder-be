@@ -14,6 +14,8 @@ public class CustomerAverageDataResponse {
     private Double gradeAverageA;
     private Double gradeAverageB;
     private Double gradeAverageC;
+    private Double gradeAverageD;
+    private Double gradeAverageE;
     private Double extSource1Average;
     private Double extSource2Average;
     private Double extSource3Average;

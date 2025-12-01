@@ -4,6 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.riskfinderteam.riskfinder.dashboard.dto.*;
 import org.riskfinderteam.riskfinder.dashboard.repository.CustomerScoringResultsRepository;
 import org.riskfinderteam.riskfinder.dashboard.repository.DashboardCustomerInfoRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +26,23 @@ private final DashboardCustomerInfoRepository dashboardCustomerInfoRepository;
     }
 
     @Override
-    public List<CustomerListDataDto> getCustomerDataList(){
-        return customerScoringResultsRepository.findAllCustomerListData();
+    public Page<CustomerListDataDto> getCustomerDataList(int page){
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
+        return customerScoringResultsRepository.findAllCustomerListData(pageable);
+    }
+
+    @Override
+    public Page<CustomerListDataDto> getCustomerDataList(int page, String search, List<String> grades){
+
+        if (search != null && search.trim().isEmpty()) {
+            search = null;
+        }
+        if (grades != null && grades.isEmpty()) {
+            grades = null;
+        }
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "skIdCurr"));
+
+        return customerScoringResultsRepository.findBySearchAndGrade(search, grades, pageable);
     }
 
     @Override
@@ -36,6 +55,8 @@ private final DashboardCustomerInfoRepository dashboardCustomerInfoRepository;
                 customerAverageDataDto.getGradeAverageA(),
                 customerAverageDataDto.getGradeAverageB(),
                 customerAverageDataDto.getGradeAverageC(),
+                customerAverageDataDto.getGradeAverageD(),
+                customerAverageDataDto.getGradeAverageE(),
                 customerExtSourceDataDto.getExtSource1Average(),
                 customerExtSourceDataDto.getExtSource2Average(),
                 customerExtSourceDataDto.getExtSource3Average()
